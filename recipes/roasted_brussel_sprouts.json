@@ -1,0 +1,13 @@
+{
+    "name": "Roasted Brussel Sprouts",
+    "meal_components": ["vegetable"],
+    "cooking_time_min": 20,
+    "servings": 4,
+    "ingredients": [
+        {
+            "name": "brussel sprouts",
+            "amount": 1,
+            "unit": "bags"
+        }
+    ]
+}

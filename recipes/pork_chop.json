@@ -1,0 +1,19 @@
+{
+    "name": "Pork Chop",
+    "meal_components": ["meat"],
+    "recipe_link": "https://cooking.nytimes.com/recipes/1025429-baked-pork-chops",
+    "cooking_time_min": 30,
+    "servings": 4,
+    "ingredients": [
+        {
+            "name": "pork chops",
+            "amount": 2,
+            "unit": "lbs"
+        },
+        {
+            "name": "garlic",
+            "amount": 2,
+            "unit": "cloves"
+        }
+    ]
+}

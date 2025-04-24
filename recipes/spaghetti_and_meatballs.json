@@ -1,0 +1,23 @@
+{
+    "name": "Spaghetti and Meatballs",
+    "meal_components": ["meat", "carb"],
+    "cooking_time_min": 20,
+    "servings": 4,
+    "ingredients": [
+        {
+            "name": "spaghetti",
+            "amount": 1,
+            "unit": "lbs"
+        },
+        {
+            "name": "meatballs",
+            "amount": 1,
+            "unit": "bags"
+        },
+        {
+            "name": "spaghetti sauce",
+            "amount": 1,
+            "unit": "jars"
+        }
+    ]
+}
