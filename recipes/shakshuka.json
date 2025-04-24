@@ -1,0 +1,39 @@
+{
+    "name": "Shakshuka",
+    "meal_components": ["meat", "carb", "vegetable"],
+    "recipe_link": "https://cooking.nytimes.com/recipes/1014721-shakshuka-with-feta", 
+    "cooking_time_min": 50,
+    "servings": 4,
+    "ingredients": [
+        {
+            "name": "onion",
+            "amount": 1,
+            "unit": "pieces"
+        },
+        {
+            "name": "bell pepper",
+            "amount": 1,
+            "unit": "pieces"
+        },
+        {
+            "name": "garlic",
+            "amount": 3,
+            "unit": "cloves"
+        },
+        {
+            "name": "canned plum tomatoes",
+            "amount": 28,
+            "unit": "ounces"
+        },
+        {
+            "name": "eggs",
+            "amount": 6,
+            "unit": "pieces"
+        },
+        {
+            "name": "feta cheese",
+            "amount": 5,
+            "unit": "ounces"
+        }
+    ]
+}

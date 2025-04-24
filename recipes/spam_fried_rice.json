@@ -1,0 +1,18 @@
+{
+    "name": "Spam Fried Rice",
+    "meal_components": ["meat", "carb", "vegetable"],
+    "cooking_time_min": 20,
+    "servings": 4,
+    "ingredients": [
+        {
+            "name": "spam",
+            "amount": 1,
+            "unit": "cans"
+        },
+        {
+            "name": "corn",
+            "amount": 1,
+            "unit": "cans"
+        }
+    ]
+}

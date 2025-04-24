@@ -1,0 +1,23 @@
+{
+    "name": "Baked Salmon",
+    "meal_components": ["meat"],
+    "cooking_time_min": 20,
+    "servings": 4,
+    "ingredients": [
+        {
+            "name": "salmon",
+            "amount": 2,
+            "unit": "fillets"
+        },
+        {
+            "name": "lemon",
+            "amount": 1,
+            "unit": "whole"
+        },
+        {
+            "name": "garlic",
+            "amount": 2,
+            "unit": "cloves"
+        }
+    ]
+}

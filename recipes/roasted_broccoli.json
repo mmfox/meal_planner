@@ -1,0 +1,13 @@
+{
+    "name": "Roasted Broccoli",
+    "meal_components": ["vegetable"],
+    "cooking_time_min": 20,
+    "servings": 4,
+    "ingredients": [
+        {
+            "name": "broccoli",
+            "amount": 2,
+            "unit": "bags"
+        }
+    ]
+}

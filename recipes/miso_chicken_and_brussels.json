@@ -1,0 +1,29 @@
+{
+    "name": "Miso Chicken and Brussels Sprouts",
+    "meal_components": ["meat", "vegetable"],
+    "recipe_link": "https://cooking.nytimes.com/recipes/1025873-miso-maple-sheet-pan-chicken-with-brussels-sprouts",
+    "cooking_time_min": 35,
+    "servings": 4,
+    "ingredients": [
+        {
+            "name": "white miso",
+            "amount": 0.33,
+            "unit": "cups"
+        },
+        {
+            "name": "maple syrup",
+            "amount": 0.33,
+            "unit": "cups"
+        },
+        {
+            "name": "brussel sprouts",
+            "amount": 12,
+            "unit": "ounces"
+        },
+        {
+            "name": "chicken thighs",
+            "amount": 2,
+            "unit": "lbs"
+        }
+    ]
+}

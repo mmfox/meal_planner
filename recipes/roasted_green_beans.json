@@ -1,0 +1,13 @@
+{
+    "name": "Roasted Green Beans",
+    "meal_components": ["vegetable"],
+    "cooking_time_min": 20,
+    "servings": 4,
+    "ingredients": [
+        {
+            "name": "green beans",
+            "amount": 1,
+            "unit": "bags"
+        }
+    ]
+}
