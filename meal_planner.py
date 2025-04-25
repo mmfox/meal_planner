@@ -1,9 +1,10 @@
-from collections import defaultdict
-
-import os
-import questionary
-import random
 import json
+import os
+import random
+from collections import defaultdict
+from typing import cast
+
+import questionary
 
 from custom_types.cooking_time_constraint import CookingTimeConstraint
 from custom_types.meal_component import MealComponent
@@ -22,7 +23,7 @@ ORDERED_DAYS = [
 
 
 def load_recipes() -> list[Recipe]:
-    recipes = []
+    recipes: list[Recipe] = []
     if not os.path.exists(RECIPE_DIR):
         print(f"Recipe directory '{RECIPE_DIR}' does not exist.")
         return recipes
@@ -40,7 +41,6 @@ def load_recipes() -> list[Recipe]:
 
 
 def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
-
     # Parse recipes and categorize them by cooking time constraints.
     recipes = load_recipes()
     main_recipes_by_time_constraint = defaultdict(list)
@@ -129,7 +129,10 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
                     f"Warning: Ingredient '{ingredient.name}' has mixed units ({ingredient.unit} vs {necessary_ingredients[ingredient.name]['unit']})."
                 )
             else:
-                necessary_ingredients[ingredient.name]["amount"] += ingredient.amount
+                necessary_ingredients[ingredient.name]["amount"] = (
+                    cast(float, necessary_ingredients[ingredient.name]["amount"])
+                    + ingredient.amount
+                )
 
     print("\nNecessary ingredients for the selected recipes:")
     sorted_keys = sorted(necessary_ingredients.keys())
