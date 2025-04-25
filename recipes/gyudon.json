@@ -1,6 +1,9 @@
 {
     "name": "Gyudon and Rice",
-    "meal_components": ["meat", "carb"],
+    "meal_components": [
+        "meat",
+        "carb"
+    ],
     "cooking_time_min": 55,
     "servings": 4,
     "ingredients": [
@@ -8,11 +11,6 @@
             "name": "gyudon beef",
             "amount": 2,
             "unit": "packets"
-        },
-        {
-            "name": "rice",
-            "amount": 3,
-            "unit": "cups"
         }
     ]
 }

@@ -1,13 +1,9 @@
 {
     "name": "Rice",
-    "meal_components": ["carb"],
+    "meal_components": [
+        "carb"
+    ],
     "cooking_time_min": 55,
     "servings": 4,
-    "ingredients": [
-        {
-            "name": "rice",
-            "amount": 3,
-            "unit": "cups"
-        }
-    ]
+    "ingredients": []
 }
