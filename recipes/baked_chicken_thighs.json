@@ -7,7 +7,7 @@
         {
             "name": "chicken thighs",
             "amount": 1,
-            "unit": "lb"
+            "unit": "lbs"
         }
     ]
 }

@@ -1,12 +1,19 @@
+from collections import defaultdict
+
 import copy
 import json
 import os
+import questionary
 import random
 
+from custom_types.cooking_time_constraint import CookingTimeConstraint
 from custom_types.meal_component import MealComponent
 from custom_types.recipe import Recipe
 
 RECIPE_DIR = 'recipes'
+ORDERED_DAYS = [
+    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+]
 
 def load_recipes() -> list[Recipe]:
     recipes = []
@@ -25,47 +32,78 @@ def load_recipes() -> list[Recipe]:
                     print(f"Error decoding JSON from {filename}")
     return recipes
 
-def meal_planner(recipes_needed: int) -> None:
+def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
+
+    # Parse recipes and categorize them by cooking time constraints.
     recipes = load_recipes()
-    main_recipes = []
+    main_recipes_by_time_constraint = defaultdict(list)
     carb_recipes = []
     vegetable_recipes = []
     for recipe in recipes:
         if MealComponent("meat") in recipe.meal_components:
-            main_recipes.append(recipe)
+            cooking_time_constraint = CookingTimeConstraint.from_cooking_time(recipe.cooking_time_min)
+            main_recipes_by_time_constraint[cooking_time_constraint].append(recipe)
         elif MealComponent("carb") in recipe.meal_components:
             carb_recipes.append(recipe)
         elif MealComponent("vegetable") in recipe.meal_components:
             vegetable_recipes.append(recipe)
 
-    random.shuffle(main_recipes)
+    chosen_recipes: dict[str, str] = {}
+    days_by_constraint = defaultdict(list)
+    for day, constraint in daily_constraints.items():
+        if constraint in (CookingTimeConstraint.NO_COOKING, CookingTimeConstraint.LEFTOVER_DAY):
+            chosen_recipes[day] = constraint.value
+        else:
+            days_by_constraint[constraint].append(day)
+    
+
+    # Print and shuffle recipes.
+    print(f"Loaded {len(recipes)} total recipes.")
     random.shuffle(carb_recipes)
     random.shuffle(vegetable_recipes)
 
-    print(f"Loaded {len(main_recipes)} main and {len(recipes)} total recipes.")
 
-    if len(main_recipes) < recipes_needed:
-        print(f"Not enough main recipes available. Found {len(main_recipes)}, but needed {recipes_needed}.")
-        return
+    # Select recipes for each day based on constraints.
+    recipes_meeting_constraints = []
+    all_recipes = []
+    for constraint in CookingTimeConstraint:
+        if constraint not in days_by_constraint:
+            continue
+
+        recipes_meeting_constraints.extend(main_recipes_by_time_constraint[constraint])
+        random.shuffle(recipes_meeting_constraints)
+        recipes_needed = len(days_by_constraint[constraint])
+        if len(recipes_meeting_constraints) < recipes_needed:
+            raise ValueError(f"Not enough recipes available for {constraint.value}. Found {len(recipes_meeting_constraints)}, but needed {recipes_needed}.")
+
     
-    chosen_mains = main_recipes[:recipes_needed]
-    
-    all_recipes = copy.deepcopy(chosen_mains) 
-    print("Selected recipes:")
-    for recipe in chosen_mains:
-        side_recipes = []
-        if MealComponent("carb") not in recipe.meal_components:
-            carb_recipe = random.choice(carb_recipes)
-            side_recipes.append(carb_recipe)
-        if MealComponent("vegetable") not in recipe.meal_components:
-            vegetable_recipe = vegetable_recipes.pop()
-            side_recipes.append(vegetable_recipe)
-        output = f"- {recipe.name}"
-        if side_recipes:
-            output += f" with {', '.join(r.name for r in side_recipes)}"
-        print(output)
-        all_recipes.extend(side_recipes)
-    
+        chosen_mains = recipes_meeting_constraints[:recipes_needed]
+        recipes_meeting_constraints = recipes_meeting_constraints[recipes_needed:]
+        all_recipes.extend(chosen_mains)
+        for day in days_by_constraint[constraint]:
+            main_recipe = chosen_mains.pop()
+            side_recipes = []
+            if MealComponent("carb") not in main_recipe.meal_components:
+                carb_recipe = random.choice(carb_recipes)
+                side_recipes.append(carb_recipe)
+            if MealComponent("vegetable") not in main_recipe.meal_components:
+                vegetable_recipe = vegetable_recipes.pop()
+                side_recipes.append(vegetable_recipe)
+            output = f"{main_recipe.name}"
+            if side_recipes:
+                output += f" with {', '.join(r.name for r in side_recipes)}"
+            
+            output += f" ({main_recipe.cooking_time_min} min)"
+            chosen_recipes[day] = output
+            all_recipes.extend(side_recipes)
+
+    # Print selected recipes by day.
+    print("\nSelected recipes for the week:")
+
+    for day in ORDERED_DAYS:
+        print(f"{day}: {chosen_recipes[day]}")
+
+    # Calculate necessary ingredients and print them. 
     necessary_ingredients = {}
     for recipe in all_recipes:
         for ingredient in recipe.ingredients:
@@ -86,5 +124,13 @@ def meal_planner(recipes_needed: int) -> None:
     
 if __name__ == "__main__":
     print("Welcome to the Meal Planner!")
-    num_recipes = int(input("How many recipes do you want to plan? "))
-    meal_planner(num_recipes)
+    daily_constraints = {}
+    for day in ORDERED_DAYS:
+        choice = questionary.select(
+            f"Select cooking availability for {day}:",
+            choices=[cooking_time_constraint.value for cooking_time_constraint in CookingTimeConstraint],
+        ).ask()
+        daily_constraints[day] = CookingTimeConstraint(choice)
+    
+
+    meal_planner(daily_constraints)
