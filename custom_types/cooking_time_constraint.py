@@ -1,9 +1,11 @@
 import enum
 
+
 class CookingTimeConstraint(enum.Enum):
     """
     Enum representing the types of cooking time constraints.
     """
+
     NO_COOKING = "No cooking"
     QUICK_MEAL = "Quick meal (30 min)"
     NORMAL_MEAL = "Normal meal (1 hour)"
@@ -14,7 +16,7 @@ class CookingTimeConstraint(enum.Enum):
         return self.value
 
     @classmethod
-    def from_cooking_time(cls, cooking_time: int) -> 'CookingTimeConstraint':
+    def from_cooking_time(cls, cooking_time: int) -> "CookingTimeConstraint":
         """
         Convert a cooking time in minutes to a CookingTimeConstraint.
         """
