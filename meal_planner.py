@@ -81,9 +81,6 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
     while should_replan:
         should_replan = False
         for constraint in CookingTimeConstraint:
-            if constraint not in days_by_constraint:
-                continue
-
             recipes_meeting_constraints.extend(
                 [
                     r
@@ -91,6 +88,10 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
                     if r not in main_recipes_to_avoid
                 ]
             )
+
+            if constraint not in days_by_constraint:
+                continue
+
             random.shuffle(recipes_meeting_constraints)
             recipes_needed = len(days_by_constraint[constraint])
             if len(recipes_meeting_constraints) < recipes_needed:
@@ -146,29 +147,48 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
                 ):
                     days_by_constraint[constraint].append(day)
 
+    # Check if we want to scale any recipes.
+    scale_factors = {}
+    scale_days = questionary.checkbox(
+        "Do you want to scale any recipes? Select the days you want to scale.",
+        choices=[
+            questionary.Choice(day, day)
+            for day in ORDERED_DAYS
+            if day_plans[day].recipes
+        ],
+    ).ask()
+    if scale_days:
+        for day in scale_days:
+            scale_factor = questionary.text(
+                f"Enter scale factor for {day}:",
+            ).ask()
+            try:
+                scale_factors[day] = float(scale_factor)
+            except ValueError:
+                print(f"Invalid scale factor '{scale_factor}' for {day}. Using 1.")
+                scale_factors[day] = 1.0
+
     # Calculate necessary ingredients and print them.
-    all_recipes = []
-    for day_plan in day_plans.values():
-        all_recipes.extend(day_plan.recipes)
-
     necessary_ingredients = {}
-    for recipe in all_recipes:
-        for ingredient in recipe.ingredients:
-            if ingredient.name not in necessary_ingredients:
-                necessary_ingredients[ingredient.name] = {
-                    "amount": 0,
-                    "unit": ingredient.unit,
-                }
+    for day, day_plan in day_plans.items():
+        scale_factor = scale_factors.get(day, 1.0)
+        for recipe in day_plan.recipes:
+            for ingredient in recipe.ingredients:
+                if ingredient.name not in necessary_ingredients:
+                    necessary_ingredients[ingredient.name] = {
+                        "amount": 0,
+                        "unit": ingredient.unit,
+                    }
 
-            if ingredient.unit != necessary_ingredients[ingredient.name]["unit"]:
-                print(
-                    f"Warning: Ingredient '{ingredient.name}' has mixed units ({ingredient.unit} vs {necessary_ingredients[ingredient.name]['unit']})."
-                )
-            else:
-                necessary_ingredients[ingredient.name]["amount"] = (
-                    cast(float, necessary_ingredients[ingredient.name]["amount"])
-                    + ingredient.amount
-                )
+                if ingredient.unit != necessary_ingredients[ingredient.name]["unit"]:
+                    print(
+                        f"Warning: Ingredient '{ingredient.name}' has mixed units ({ingredient.unit} vs {necessary_ingredients[ingredient.name]['unit']})."
+                    )
+                else:
+                    necessary_ingredients[ingredient.name]["amount"] = (
+                        cast(float, necessary_ingredients[ingredient.name]["amount"])
+                        + ingredient.amount * scale_factor
+                    )
 
     print("\nNecessary ingredients for the selected recipes:")
     sorted_keys = sorted(necessary_ingredients.keys())
