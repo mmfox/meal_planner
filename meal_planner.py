@@ -4,10 +4,13 @@ import random
 from collections import defaultdict
 from typing import cast
 
+import click
 import questionary
+from rapidfuzz import process
 
 from custom_types.cooking_time_constraint import CookingTimeConstraint
 from custom_types.day_plan import DayPlan
+from custom_types.ingredient import Ingredient
 from custom_types.meal_component import MealComponent
 from custom_types.recipe import Recipe
 
@@ -197,8 +200,26 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
         print(f"- {ingredient_name}: {details['amount']} {details['unit']}")
 
 
-if __name__ == "__main__":
-    print("Welcome to the Meal Planner!")
+def find_ingredient_match(
+    new_ingredient_name: str, known_ingredient_names: list[str], threshold=80
+) -> str | None:
+    match = process.extractOne(
+        new_ingredient_name, known_ingredient_names, score_cutoff=threshold
+    )
+    if match:
+        return match[0]  # return the matched ingredient
+    return None
+
+
+@click.group()
+def cli():
+    """Meal Planner CLI."""
+    pass
+
+
+@cli.command()
+def run():
+    """Run the meal planner."""
     daily_constraints = {}
     for day in ORDERED_DAYS:
         choice = questionary.select(
@@ -211,3 +232,100 @@ if __name__ == "__main__":
         daily_constraints[day] = CookingTimeConstraint(choice)
 
     meal_planner(daily_constraints)
+
+
+@cli.command()
+def list_recipes():
+    """List all available recipes."""
+    recipes = load_recipes()
+    if not recipes:
+        print("No recipes found.")
+        return
+
+    print("Available recipes:")
+    for recipe in recipes:
+        print(f"- {recipe.name} ({recipe.cooking_time_min} min)")
+
+
+@cli.command()
+def add_recipe():
+    """Add a new recipe."""
+    recipes = load_recipes()
+    known_ingredient_units = {}
+    for recipe in recipes:
+        for ingredient in recipe.ingredients:
+            if ingredient.name not in known_ingredient_units:
+                known_ingredient_units[ingredient.name] = ingredient.unit
+    known_ingredient_names = list(known_ingredient_units.keys())
+
+    name = questionary.text("Enter recipe name:").ask()
+    cooking_time_min = questionary.text(
+        "Enter cooking time in minutes:", default="30"
+    ).ask()
+    servings = questionary.text("Enter number of servings:", default="4").ask()
+    recipe_link = questionary.text("Enter recipe link, if relevant:").ask()
+
+    ingredients = []
+    while True:
+        # Add ingredients, one at a time.  Allow entering no name as a way to finish.
+        ingredient_name = questionary.text(
+            "Enter ingredient name (or nothing to complete ingredient setup):",
+        ).ask()
+        if ingredient_name == "":
+            break
+
+        potential_ingredient_match = find_ingredient_match(
+            ingredient_name,
+            known_ingredient_names,
+        )
+        if potential_ingredient_match:
+            use_existing = questionary.confirm(
+                f"Found existing ingredient '{potential_ingredient_match}'. Use it instead of creating a new one?"
+            ).ask()
+            if use_existing:
+                ingredient_name = potential_ingredient_match
+
+        # TODO: sanitize and look for pre-existing ingredients as a match
+        ingredient_units = questionary.text(
+            "Enter ingredient units, pluralized:",
+            default=known_ingredient_units.get(ingredient_name, ""),
+        ).ask()
+        ingredient_amount = questionary.text(
+            "Enter ingredient amount:",
+        ).ask()
+        ingredients.append(
+            Ingredient(
+                ingredient_name.strip(),
+                ingredient_units.strip(),
+                float(ingredient_amount),
+            )
+        )
+
+    meal_components = questionary.checkbox(
+        "Select meal components:",
+        choices=[component.value for component in MealComponent],
+    ).ask()
+
+    recipe = Recipe(
+        name=name,
+        ingredients=ingredients,
+        cooking_time_min=int(cooking_time_min),
+        servings=int(servings),
+        meal_components=[MealComponent(component) for component in meal_components],
+        recipe_link=recipe_link if recipe_link else None,
+    )
+
+    if not os.path.exists(RECIPE_DIR):
+        os.makedirs(RECIPE_DIR)
+
+    filename = "_".join(name.lower().split())
+    filepath = os.path.join(RECIPE_DIR, f"{filename}.json")
+    with open(filepath, "w") as file:
+        json.dump(recipe.to_dict(), file, indent=4)
+
+    print(f"Recipe '{name}' added successfully.")
+
+
+if __name__ == "__main__":
+    print("Welcome to the Meal Planner CLI!")
+    cli()
