@@ -1,0 +1,52 @@
+{
+    "name": "Vegan Pesto Pasta Salad",
+    "ingredients": [
+        {
+            "name": "fusilli",
+            "amount": 1.0,
+            "unit": "lbs"
+        },
+        {
+            "name": "cherry tomatoes",
+            "amount": 1.0,
+            "unit": "pint"
+        },
+        {
+            "name": "almonds",
+            "amount": 0.5,
+            "unit": "cups"
+        },
+        {
+            "name": "capers",
+            "amount": 0.33,
+            "unit": "cups"
+        },
+        {
+            "name": "garlic",
+            "amount": 1.0,
+            "unit": "cloves"
+        },
+        {
+            "name": "basil leaves",
+            "amount": 2.0,
+            "unit": "cups"
+        },
+        {
+            "name": "lemon",
+            "amount": 1.0,
+            "unit": "whole"
+        },
+        {
+            "name": "arugula",
+            "amount": 2.0,
+            "unit": "cups"
+        }
+    ],
+    "cooking_time_min": 35,
+    "servings": 4,
+    "meal_components": [
+        "vegetable",
+        "carb"
+    ],
+    "recipe_link": "https://cooking.nytimes.com/recipes/1025659-vegan-pesto-pasta-salad"
+}

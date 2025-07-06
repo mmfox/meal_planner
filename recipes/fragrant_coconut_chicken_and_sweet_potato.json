@@ -1,0 +1,57 @@
+{
+    "name": "Fragrant Coconut Chicken and Sweet Potato",
+    "ingredients": [
+        {
+            "name": "sweet potato",
+            "amount": 1.0,
+            "unit": "whole"
+        },
+        {
+            "name": "scallions",
+            "amount": 0.5,
+            "unit": "cup"
+        },
+        {
+            "name": "garlic",
+            "amount": 3.0,
+            "unit": "cloves"
+        },
+        {
+            "name": "ginger",
+            "amount": 1.0,
+            "unit": "tablespoons"
+        },
+        {
+            "name": "ground chicken",
+            "amount": 1.0,
+            "unit": "lbs"
+        },
+        {
+            "name": "unsweetened full-fat coconut milk",
+            "amount": 1.0,
+            "unit": "cup"
+        },
+        {
+            "name": "baby spinach",
+            "amount": 4.0,
+            "unit": "cups"
+        },
+        {
+            "name": "lime juice",
+            "amount": 2.0,
+            "unit": "tbsps"
+        },
+        {
+            "name": "cilantro",
+            "amount": 0.25,
+            "unit": "cups"
+        }
+    ],
+    "cooking_time_min": 40,
+    "servings": 4,
+    "meal_components": [
+        "meat",
+        "vegetable"
+    ],
+    "recipe_link": "https://cooking.nytimes.com/recipes/1026305-fragrant-coconut-chicken-and-sweet-potato"
+}

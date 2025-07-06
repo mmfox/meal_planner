@@ -1,0 +1,37 @@
+{
+    "name": "Mille-Feuille Nabe",
+    "ingredients": [
+        {
+            "name": "napa cabbage",
+            "amount": 1.0,
+            "unit": "head"
+        },
+        {
+            "name": "sliced pork belly",
+            "amount": 1.5,
+            "unit": "lbs"
+        },
+        {
+            "name": "ginger",
+            "amount": 10.0,
+            "unit": "tablespoons"
+        },
+        {
+            "name": "dashi",
+            "amount": 5.0,
+            "unit": "cups"
+        },
+	{
+	    "name": "sake",
+	    "unit": "tbsps",
+	    "amount": 2.0
+	}
+    ],
+    "cooking_time_min": 30,
+    "servings": 4,
+    "meal_components": [
+        "meat",
+        "vegetable"
+    ],
+    "recipe_link": "https://www.justonecookbook.com/mille-feuille-nabe/"
+}

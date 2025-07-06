@@ -1,0 +1,62 @@
+{
+    "name": "Ginger-Garlic Shrimp With Coconut Milk",
+    "ingredients": [
+        {
+            "name": "garlic",
+            "amount": 2.0,
+            "unit": "cloves"
+        },
+        {
+            "name": "ginger",
+            "amount": 1.0,
+            "unit": "tablespoons"
+        },
+        {
+            "name": "turmeric",
+            "amount": 1.0,
+            "unit": "tsps"
+        },
+        {
+            "name": "shrimp",
+            "amount": 1.0,
+            "unit": "lbs"
+        },
+        {
+            "name": "unsweetened full-fat coconut milk",
+            "amount": 1.0,
+            "unit": "cans"
+        },
+        {
+            "name": "baby spinach",
+            "amount": 3.0,
+            "unit": "cups"
+        },
+        {
+            "name": "lime",
+            "amount": 0.5,
+            "unit": "while"
+        },
+        {
+            "name": "serrano chile",
+            "amount": 1.0,
+            "unit": "whole"
+        },
+        {
+            "name": "scallions",
+            "amount": 0.25,
+            "unit": "cup"
+        },
+        {
+            "name": "cilantro",
+            "amount": 0.5,
+            "unit": "cups"
+        }
+    ],
+    "cooking_time_min": 20,
+    "servings": 4,
+    "meal_components": [
+        "meat",
+        "vegetable"
+    ],
+    "recipe_link": "https://cooking.nytimes.com/recipes/1023206-ginger-garlic-shrimp-with-coconut-milk?algo=cooking_search_relevance_metric_ios_and_web&fellback=false&imp_id=2371498790612333&req_id=6395546852528118&surface=cooking-search-web&variant=0_relevance_reranking"
+}
