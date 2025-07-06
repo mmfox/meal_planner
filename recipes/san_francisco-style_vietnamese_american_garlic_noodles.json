@@ -1,0 +1,46 @@
+{
+    "name": "San Francisco-Style Vietnamese American Garlic Noodles",
+    "ingredients": [
+        {
+            "name": "butter",
+            "amount": 4.0,
+            "unit": "tbsps"
+        },
+        {
+            "name": "garlic",
+            "amount": 20.0,
+            "unit": "cloves"
+        },
+        {
+            "name": "oyster sauce",
+            "amount": 4.0,
+            "unit": "tsps"
+        },
+        {
+            "name": "soy sauce",
+            "amount": 2.0,
+            "unit": "tsps"
+        },
+        {
+            "name": "fish sauce",
+            "amount": 2.0,
+            "unit": "tsps"
+        },
+        {
+            "name": "spaghetti",
+            "amount": 1.0,
+            "unit": "lbs"
+        },
+        {
+            "name": "parmesan",
+            "amount": 1.0,
+            "unit": "oz"
+        }
+    ],
+    "cooking_time_min": 15,
+    "servings": 4,
+    "meal_components": [
+        "carb"
+    ],
+    "recipe_link": "https://cooking.nytimes.com/recipes/1023012-san-francisco-style-vietnamese-american-garlic-noodles?algo=identity&fellback=true&imp_id=7595550853434109&req_id=3383679240543631&surface=cooking-search-web&variant=0_relevance_reranking"
+}

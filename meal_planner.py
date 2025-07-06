@@ -296,8 +296,8 @@ def add_recipe():
         ingredients.append(
             Ingredient(
                 ingredient_name.strip(),
-                ingredient_units.strip(),
                 float(ingredient_amount),
+                ingredient_units.strip(),
             )
         )
 

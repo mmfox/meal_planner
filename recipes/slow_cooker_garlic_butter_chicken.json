@@ -1,0 +1,51 @@
+{
+    "name": "Slow Cooker Garlic Butter Chicken ",
+    "ingredients": [
+        {
+            "name": "chicken thighs",
+            "unit": "lbs",
+            "amount": 1.5
+        },
+        {
+            "name": "cannellini beans",
+            "unit": "cans (15oz)",
+            "amount": 2.0
+        },
+        {
+            "name": "butter",
+            "unit": "tbsps",
+            "amount": 4.0
+        },
+        {
+            "name": "garlic",
+            "unit": "cloves",
+            "amount": 8.0
+        },
+        {
+            "name": "parsley",
+            "unit": "cups",
+            "amount": 0.33
+        },
+        {
+            "name": "shallot",
+            "unit": "whole",
+            "amount": 1.0
+        },
+        {
+            "name": "lemon",
+            "unit": "whole",
+            "amount": 1.0
+        },
+        {
+            "name": "sour cream",
+            "unit": "cup",
+            "amount": 0.5
+        }
+    ],
+    "cooking_time_min": 250,
+    "servings": 4,
+    "meal_components": [
+        "meat"
+    ],
+    "recipe_link": "https://cooking.nytimes.com/recipes/1026893-slow-cooker-garlic-butter-chicken"
+}
