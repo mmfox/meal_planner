@@ -8,7 +8,7 @@
         },
         {
             "name": "cannellini beans",
-            "unit": "cans (15oz)",
+            "unit": "cans",
             "amount": 2.0
         },
         {
@@ -38,7 +38,7 @@
         },
         {
             "name": "sour cream",
-            "unit": "cup",
+            "unit": "cups",
             "amount": 0.5
         }
     ],

@@ -9,7 +9,7 @@
         {
             "name": "scallions",
             "amount": 0.5,
-            "unit": "cup"
+            "unit": "cups"
         },
         {
             "name": "garlic",
@@ -19,7 +19,7 @@
         {
             "name": "ginger",
             "amount": 1.0,
-            "unit": "tablespoons"
+            "unit": "tbsps"
         },
         {
             "name": "ground chicken",
@@ -29,7 +29,7 @@
         {
             "name": "unsweetened full-fat coconut milk",
             "amount": 1.0,
-            "unit": "cup"
+            "unit": "cups"
         },
         {
             "name": "baby spinach",

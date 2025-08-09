@@ -4,7 +4,7 @@
         {
             "name": "napa cabbage",
             "amount": 1.0,
-            "unit": "head"
+            "unit": "heads"
         },
         {
             "name": "sliced pork belly",
@@ -21,11 +21,11 @@
             "amount": 5.0,
             "unit": "cups"
         },
-	{
-	    "name": "sake",
-	    "unit": "tbsps",
-	    "amount": 2.0
-	}
+	     {
+	         "name": "sake",
+	         "unit": "tbsps",
+	         "amount": 2.0
+	     }
     ],
     "cooking_time_min": 30,
     "servings": 4,
