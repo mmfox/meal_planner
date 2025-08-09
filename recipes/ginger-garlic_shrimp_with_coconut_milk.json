@@ -34,7 +34,7 @@
         {
             "name": "lime",
             "amount": 0.5,
-            "unit": "while"
+            "unit": "whole"
         },
         {
             "name": "serrano chile",
@@ -44,7 +44,7 @@
         {
             "name": "scallions",
             "amount": 0.25,
-            "unit": "cup"
+            "unit": "cups"
         },
         {
             "name": "cilantro",

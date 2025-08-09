@@ -2,7 +2,7 @@ import json
 import os
 import random
 from collections import defaultdict
-from typing import cast
+from typing import cast, Optional
 
 import click
 import questionary
@@ -44,14 +44,33 @@ def load_recipes() -> list[Recipe]:
     return recipes
 
 
+def combine_recipe_names(main_recipe: Recipe, side_recipes: list[Recipe]) -> str:
+    output = f"{main_recipe.name}"
+    if side_recipes:
+        output += f" with {', '.join(r.name for r in side_recipes)}"
+
+    output += f" ({main_recipe.cooking_time_min} min)"
+    return output
+
+
+def print_week_plan(day_plans: dict[str, DayPlan]) -> None:
+    # Print selected recipes by day.
+    print("\nSelected recipes for the week:")
+
+    for day in ORDERED_DAYS:
+        print(f"{day}: {day_plans[day].description}")
+
+
 def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
     # Parse recipes and categorize them by cooking time constraints.
     recipes = load_recipes()
     main_recipes_by_time_constraint = defaultdict(list)
+    main_recipes = []
     carb_recipes = []
     vegetable_recipes = []
     for recipe in recipes:
         if MealComponent("meat") in recipe.meal_components:
+            main_recipes.append(recipe)
             cooking_time_constraint = CookingTimeConstraint.from_cooking_time(
                 recipe.cooking_time_min
             )
@@ -113,18 +132,10 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
                 if MealComponent("vegetable") not in main_recipe.meal_components:
                     vegetable_recipe = vegetable_recipes.pop()
                     side_recipes.append(vegetable_recipe)
-                output = f"{main_recipe.name}"
-                if side_recipes:
-                    output += f" with {', '.join(r.name for r in side_recipes)}"
 
-                output += f" ({main_recipe.cooking_time_min} min)"
-                day_plans[day] = DayPlan(output, [main_recipe] + side_recipes)
+                day_plans[day] = DayPlan(combine_recipe_names(main_recipe, side_recipes), [main_recipe] + side_recipes)
 
-        # Print selected recipes by day.
-        print("\nSelected recipes for the week:")
-
-        for day in ORDERED_DAYS:
-            print(f"{day}: {day_plans[day].description}")
+        print_week_plan(day_plans)
 
         replan_days = questionary.checkbox(
             "Choose any days that you want to replan with different recipes.",
@@ -149,6 +160,48 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
                     CookingTimeConstraint.LEFTOVER_DAY,
                 ):
                     days_by_constraint[constraint].append(day)
+
+    # Allow for any manual overrides
+    manual_days = questionary.checkbox(
+        "Do you want to manually choose a recipe for any days?",
+        choices=[
+            questionary.Choice(day, day)
+            for day in ORDERED_DAYS
+            if day_plans[day].recipes
+        ],
+    ).ask()
+
+    for day in manual_days:
+        main_recipe = questionary.select(
+           f"On {day}, which main dish would you like?",
+           choices=[
+               questionary.Choice(main_recipe.name, main_recipe)
+               for main_recipe in main_recipes 
+           ],
+        ).ask()
+        side_recipes = []
+
+        if MealComponent("carb") not in main_recipe.meal_components:
+            carb_recipe = questionary.select(
+               f"On {day}, which carb would you like?",
+               choices=[
+                   questionary.Choice(carb_recipe.name, carb_recipe)
+                   for carb_recipe in carb_recipes 
+               ],
+            ).ask()
+            side_recipes.append(carb_recipe)
+        if MealComponent("vegetable") not in main_recipe.meal_components:
+            veg_recipe = questionary.select(
+               f"On {day}, which vegetable would you like?",
+               choices=[
+                   questionary.Choice(veg_recipe.name, veg_recipe)
+                   for veg_recipe in vegetable_recipes 
+               ],
+            ).ask()
+            side_recipes.append(veg_recipe)
+
+        day_plans[day] = DayPlan(combine_recipe_names(main_recipe, side_recipes), [main_recipe] + side_recipes)
+
 
     # Check if we want to scale any recipes.
     scale_factors = {}
@@ -193,6 +246,8 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
                         + ingredient.amount * scale_factor
                     )
 
+    print_week_plan(day_plans)
+
     print("\nNecessary ingredients for the selected recipes:")
     sorted_keys = sorted(necessary_ingredients.keys())
     for ingredient_name in sorted_keys:
@@ -202,7 +257,7 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
 
 def find_ingredient_match(
     new_ingredient_name: str, known_ingredient_names: list[str], threshold=80
-) -> str | None:
+) -> Optional[str]:
     match = process.extractOne(
         new_ingredient_name, known_ingredient_names, score_cutoff=threshold
     )
