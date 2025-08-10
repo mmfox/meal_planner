@@ -7,6 +7,7 @@ from typing import cast, Optional
 import click
 import questionary
 from rapidfuzz import process
+from tabulate import tabulate
 
 from custom_types.cooking_time_constraint import CookingTimeConstraint
 from custom_types.day_plan import DayPlan
@@ -49,16 +50,18 @@ def combine_recipe_names(main_recipe: Recipe, side_recipes: list[Recipe]) -> str
     if side_recipes:
         output += f" with {', '.join(r.name for r in side_recipes)}"
 
-    output += f" ({main_recipe.cooking_time_min} min)"
     return output
 
 
-def print_week_plan(day_plans: dict[str, DayPlan]) -> None:
+def print_week_plan(day_plans: dict[str, DayPlan], scale_factors: dict[str, float]) -> None:
     # Print selected recipes by day.
     print("\nSelected recipes for the week:")
 
+    headers = ["Day", "Recipes", "Cooking time (min)", "Scale Factor"]
+    data = []
     for day in ORDERED_DAYS:
-        print(f"{day}: {day_plans[day].description}")
+        data.append([day, day_plans[day].description, day_plans[day].cooking_time_min, scale_factors.get(day, 1.0)])
+    print(tabulate(data, headers, tablefmt="rounded_outline"))
 
 
 def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
@@ -87,7 +90,7 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
             CookingTimeConstraint.NO_COOKING,
             CookingTimeConstraint.LEFTOVER_DAY,
         ):
-            day_plans[day] = DayPlan(constraint.value, [])
+            day_plans[day] = DayPlan(constraint.value, 0, [])
         else:
             days_by_constraint[constraint].append(day)
 
@@ -133,9 +136,9 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
                     vegetable_recipe = vegetable_recipes.pop()
                     side_recipes.append(vegetable_recipe)
 
-                day_plans[day] = DayPlan(combine_recipe_names(main_recipe, side_recipes), [main_recipe] + side_recipes)
+                day_plans[day] = DayPlan(combine_recipe_names(main_recipe, side_recipes), main_recipe.cooking_time_min, [main_recipe] + side_recipes)
 
-        print_week_plan(day_plans)
+        print_week_plan(day_plans, scale_factors={})
 
         replan_days = questionary.checkbox(
             "Choose any days that you want to replan with different recipes.",
@@ -247,13 +250,16 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
                         + ingredient.amount * scale_factor
                     )
 
-    print_week_plan(day_plans)
+    print_week_plan(day_plans, scale_factors)
 
     print("\nNecessary ingredients for the selected recipes:")
     sorted_keys = sorted(necessary_ingredients.keys())
+    headers = ["Ingredient", "Quantity", "Unit"]
+    data = []
     for ingredient_name in sorted_keys:
         details = necessary_ingredients[ingredient_name]
-        print(f"- {ingredient_name}: {details['amount']} {details['unit']}")
+        data.append([ingredient_name, details['amount'], details['unit']])
+    print(tabulate(data, headers, tablefmt="fancy_grid"))
 
 
 def find_ingredient_match(

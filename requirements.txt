@@ -20,6 +20,7 @@ pyflakes==3.3.2
 PyYAML==6.0.2
 questionary==2.1.0
 rapidfuzz==3.13.0
+tabulate==0.9.0
 typing_extensions==4.13.2
 virtualenv==20.30.0
 wcwidth==0.2.13
