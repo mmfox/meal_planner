@@ -201,7 +201,7 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
             ).ask()
             side_recipes.append(veg_recipe)
 
-        day_plans[day] = DayPlan(combine_recipe_names(main_recipe, side_recipes), [main_recipe] + side_recipes)
+        day_plans[day] = DayPlan(combine_recipe_names(main_recipe, side_recipes), main_recipe.cooking_time_min, [main_recipe] + side_recipes)
 
 
     # Check if we want to scale any recipes.
