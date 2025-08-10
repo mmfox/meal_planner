@@ -129,7 +129,7 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
                 if MealComponent("carb") not in main_recipe.meal_components:
                     carb_recipe = random.choice(carb_recipes)
                     side_recipes.append(carb_recipe)
-                if MealComponent("vegetable") not in main_recipe.meal_components:
+                if not any([MealComponent("vegetable") in recipe.meal_components for recipe in [main_recipe] + side_recipes]):
                     vegetable_recipe = vegetable_recipes.pop()
                     side_recipes.append(vegetable_recipe)
 
@@ -144,11 +144,12 @@ def meal_planner(daily_constraints: dict[str, CookingTimeConstraint]) -> None:
         if replan_days:
             should_replan = True
             main_recipes_to_avoid = []
-            for day_plan in day_plans.values():
+            recipes_meeting_constraints = []
+            for day, day_plan in day_plans.items():
                 for recipe in day_plan.recipes:
                     if MealComponent.MEAT in recipe.meal_components:
                         main_recipes_to_avoid.append(recipe)
-                    elif MealComponent.VEGETABLE in recipe.meal_components:
+                    elif MealComponent.VEGETABLE in recipe.meal_components and day in replan_days:
                         vegetable_recipes.append(recipe)
 
             random.shuffle(vegetable_recipes)
